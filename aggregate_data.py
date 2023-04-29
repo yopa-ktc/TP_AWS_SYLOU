@@ -3,8 +3,8 @@ import streamlit as st
 
 
 # Charger les données
-data1 = pd.read_csv('tp_final_data_pipeline/samples/messages.csv')
-data2 = pd.read_csv('tp_final_data_pipeline/samples/users.csv')
+data1 = pd.read_csv('./samples/messages.csv')
+data2 = pd.read_csv('./samples/users.csv')
 
 # Renommer la colonne 'author_id' pour pouvoir fusionner les dataframes
 data1 = data1.rename(columns={'author_id': 'user_id'})

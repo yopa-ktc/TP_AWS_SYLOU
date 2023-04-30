@@ -1,53 +1,7 @@
 # TP - Final - Data Pipelines
 
-### ⚙ Requirements
-
-- The AWS account provided by your teacher
-- The AWS CLI tool: [https://aws.amazon.com/cli](https://aws.amazon.com/cli)
-- When logged in your AWS account, be sure to switch the language to English with bottom left language link
-
- 
-
-> ⚠️ All the actions you will execute on your account will be billed to your teacher account so follow carefully the instructions to not occur unexpected costs (all the actions of your account are monitored and traceable by your teacher) ⚠️
-> 
-
-
-
-## 🥅  Goal
-
-We are simulating a scenario, where our customer is the owner of customer support center and want a way to rank the most active clients by the number of message received from them.
-
-During this exercise, we will have to create 4 iterations of the same data pipeline from a pipeline that is manual and simple to an automated one deployed partially in the cloud.
-
-## 🎯 First Iteration
-
-![First Pipeline](./docs/first-pipeline.svg)
-
-The components of this data pipeline iteration are:
-
-- 2 CSV files `messages.csv` and `users.csv` (you can find samples in the `/samples` folder)
-- A Python script `aggregate_data.py`:
-    - This script handles 3 mandatory arguments:
-        - `messages_path`: path to messages data file
-        - `users_path`: path to user data file
-        - `output_path`:  path to output the result of the script
-    - This script must group messages by `user_id` and rank them by messages received in ascending order and produce a new CSV file called `pipeline_result.csv` at the path specified by the `output_path` argument
-    - The script must manage errors and exit the program if anything bad happens with an explanatory output
-- A Python script `feed_database.py`:
-    - This script handles 3 mandatory arguments:
-        - database_uri
-    - stores `pipeline_result.csv` data into a SQL database in table called `leaderboard`
-    - this script must SQLAlchemy to design the table and interact with the database
-    - a migration script must be available to setup the database by using Alembic
-
-This data pipeline is pretty manual and will require the user to launch the 2 python scripts on the CSV files to execute it.
-
-### **Bonus**
-
-Create a Streamlit application in a [web-app.py](http://web-app.py) file that will have 2 tabs named:
-
-- `Upload`: the user can upload the `messages.csv` and `users.csv` and the app will save them in a `/samples` directory
-- Leaderboard: the user can view the `results.csv` as table
+LANCER L'ENVIRONNEMENT POUR EXECUTER : ./aws/Scripts/activate
+EXECUTER LA COMMANDE STREAMLIT : 
 
 ## 🎯 Second iteration
 

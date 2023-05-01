@@ -38,7 +38,8 @@ Also to make the setup of pipeline easier, specify a Docker command to create co
 - The docker command (update the command below):
 
 ```json
-docker ...
+$ docker run -d   --name leaderboard_db   -v C:/data:/var/lib/sqlite   -p 5432:5432   -e POSTGRES_DB=leaderboard   postgres:latest
+
 ```
 
 Our users can now interact with our application through an API instead of using SQL queries but we want to be able to interact with remote data so we are going to store all our CSVs in the cloud with AWS S3.

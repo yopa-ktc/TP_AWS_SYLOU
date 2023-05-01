@@ -39,7 +39,7 @@ def leaderboard():
     all_lead = []
     for lead in get_all_leadboard:
         all_lead.append({"id": lead.id, "user_id": lead.user_id, "name": lead.name, "message": nbre_message_userId[lead.user_id]})
-    return all_lead
+    return jsonify({"leaderboard" :all_lead})
     
     
     

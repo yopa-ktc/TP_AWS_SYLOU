@@ -1,6 +1,7 @@
 # TP - Final - Data Pipelines
 
 LANCER L'ENVIRONNEMENT POUR EXECUTER : ./aws/Scripts/activate
+
 EXECUTER LA COMMANDE STREAMLIT : 
 
 ## 🎯 Second iteration

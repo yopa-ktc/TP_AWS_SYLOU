@@ -10,19 +10,21 @@ declarative_base().metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 session = Session()
 
+def feed_database(data_path):
+    # open the CSV file
+    with open(data_path, newline='') as csvfile:
+        # create a CSV reader object
+        reader = csv.reader(csvfile, delimiter=',', quotechar='"')
+        # iterate over each row in the file
+        next(reader, None)
+        for row in reader:
+            # create a new leaderboard entry
+            add_leaderboard = LeaderBoard_Repository(session)
+            add_leaderboard.create_Leaderboard(row[0], "ramses", row[1])
 
-# open the CSV file
-with open("pipeline_result.csv", newline='') as csvfile:
-    # create a CSV reader object
-    reader = csv.reader(csvfile, delimiter=',', quotechar='"')
-    # iterate over each row in the file
-    next(reader, None)
-    for row in reader:
-        # create a new leaderboard entry
-        add_leaderboard = LeaderBoard_Repository(session)
-        add_leaderboard.create_Leaderboard(row[0], "yopa", row[1])
-
-session.close()
+    session.close()
+    
+feed_database("pipeline_result.csv")
     
 """
 if __name__ == '__main__':

@@ -2,47 +2,38 @@ import streamlit as st
 import pandas as pd
 
 # Titre de l'application
-st.title("Mon application Streamlit")
+st.markdown("<h1 style='color:blue;'>Mon application Streamlit</h1>", unsafe_allow_html=True)
 
-# Création des onglets
-menu = ["Telechargement", "Classement"]
-choice = st.sidebar.selectbox("Choisir une option", menu)
+# Définir les champs d'upload de fichiers
+st.write("### <h1 style='color:red;'>Télécharger les fichiers </h1>", unsafe_allow_html=True)
+file1 = st.file_uploader("messages.csv")
+file2 = st.file_uploader("users.csv")
 
-# Si l'utilisateur a choisi l'onglet "Telechargement"
-if choice == "Telechargement":
-    st.subheader("Téléchargement des fichiers CSV")
-    
-    # Téléchargement de messages.csv
-    st.write("### Téléchargement de messages.csv")
-    df_messages = pd.read_csv("C:/Users/sylva/OneDrive/Bureau/API_Docker_Hetic_2023/Docker_Api_Tp_Final/TP_AWS_SYLOU/samples/messages.csv")
-    st.success("Le fichier messages.csv a été bien enregistré")
-    # Créer un bouton de téléchargement pour le fichier messages.csv
-    st.download_button(
-        label="Télécharger messages.csv",
-        data=df_messages.to_csv().encode("utf-8"),
-        file_name="messages.csv",
-        mime="text/csv"
-    )
-    
-    # Téléchargement de users.csv
-    st.write("### Téléchargement de users.csv")
-    df_users = pd.read_csv("C:/Users/sylva/OneDrive/Bureau/API_Docker_Hetic_2023/Docker_Api_Tp_Final/TP_AWS_SYLOU/samples/users.csv")
-    st.success("Le fichier users.csv a été bien enregistré")
-    # Créer un bouton de téléchargement pour le fichier users.csv
-    st.download_button(
-        label="Télécharger users.csv",
-        data=df_users.to_csv().encode("utf-8"),
-        file_name="users.csv",
-        mime="text/csv"
-    )
+# Créer le bouton pour afficher les chemins des fichiers uploadés
+if st.button('Aggregation'):
+    # Vérifier si les fichiers ont été uploadés
+    if file1 and file2:
+        # Charger les fichiers CSV dans des dataframes pandas
+        df_messages = pd.read_csv(file1)
+        df_users = pd.read_csv(file2)
 
-# Si l'utilisateur a choisi l'onglet "Classement"
-elif choice == "Classement":
-    st.subheader("Affichage du fichier results.csv")
-    
-    # Chargement du fichier results.csv
-    try:
-        df_results = pd.read_csv("results.csv")
-        st.write(df_results)
-    except FileNotFoundError:
-        st.warning("Le fichier results.csv n'a pas été trouvé dans le dossier Streamlit")
+        # Renommer la colonne 'first_name' en 'name' dans le dataframe df_users
+        df_users = df_users.rename(columns={'first_name': 'name'})
+
+        # Renommer la colonne 'author_id' en 'user_id' dans le dataframe df_messages
+        df_messages = df_messages.rename(columns={'author_id': 'user_id'})
+
+        # Fusionner les deux dataframes
+        df_concat = pd.merge(df_messages, df_users, on='user_id', how='left')
+
+        # Sélectionner les colonnes 'user_id', 'name' et 'content'
+        df_concat = df_concat[['user_id', 'name', 'content']]
+
+        # Enregistrer le résultat dans un fichier CSV nommé pipeline_result.csv
+        df_concat.to_csv("pipeline_result.csv", index=False)
+
+        # Afficher le contenu du fichier pipeline_result.csv
+        st.write("Contenu du fichier pipeline_result.csv :")
+        st.write(df_concat)
+    else:
+        st.write("Veuillez uploader deux fichiers pour continuer.")

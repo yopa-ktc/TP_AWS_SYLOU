@@ -29,7 +29,7 @@ def feed():
 
 #API REST : localhost:5000/leaderboard, elle est appellée pour récupérer les messages par noms d'auteurs
 #Une première fonction "get_messages_count_by_user_id" compte le nombre de messages et l'associe à un user_id
-#Une seconde fonction "get_all_messages" renvoie tous les valeurs de la table leaderboard
+#Une seconde fonction "get_all_messages" renvoie toutes les valeurs de la table leaderboard
 #A la fin, nous faisons une association pour renvoyer toutes les lignes avec le nombre de messages
 @app.route("/leaderboard", methods=["GET"])
 def leaderboard():
@@ -40,8 +40,7 @@ def leaderboard():
     for lead in get_all_leadboard:
         all_lead.append({"id": lead.id, "user_id": lead.user_id, "name": lead.name, "message": nbre_message_userId[lead.user_id]})
     return jsonify({"leaderboard" :all_lead})
-    
-    
+        
     
 if __name__ == "__main__":
-    app.run()   
+    app.run()  

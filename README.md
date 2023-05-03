@@ -2,7 +2,8 @@
 
 LANCER L'ENVIRONNEMENT POUR EXECUTER : ./aws/Scripts/activate
 
-EXECUTER LA COMMANDE STREAMLIT : 
+EXECUTER LA COMMANDE STREAMLIT : cd Streamlit 
+                                streamlit run web-api.pi
 
 ## 🎯 Second iteration
 

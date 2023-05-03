@@ -39,4 +39,4 @@ for message in selected_content:
 
     
 # # Sauvegarder le dataframe au format CSV  
-pipeline_result[['user_id', 'name', 'content']].to_csv('pipeline_result2.csv', index=False)
+# pipeline_result[['user_id', 'name', 'content']].to_csv('pipeline_result.csv', index=False) 

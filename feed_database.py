@@ -20,7 +20,7 @@ def feed_database(data_path):
         for row in reader:
             # create a new leaderboard entry
             add_leaderboard = LeaderBoard_Repository(session)
-            add_leaderboard.create_Leaderboard(row[0], "ramses", row[1])
+            add_leaderboard.create_Leaderboard(row[0], row[1], row[2])
 
     session.close()
     

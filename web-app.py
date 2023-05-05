@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import subprocess
+import os
 
 
 # Titre de l'application
@@ -32,15 +33,18 @@ if choix == "Aggregation":
 
             # Renommer la colonne 'author_id' en 'user_id' dans le dataframe df_messages
             df_messages = df_messages.rename(columns={'author_id': 'user_id'})
+            
+            # Renommer la colonne 'content' en 'message' dans le dataframe df_messages
+            df_messages = df_messages.rename(columns={'content': 'message'})
 
             # Fusionner les deux dataframes
             df_concat = pd.merge(df_messages, df_users, on='user_id', how='left')
 
             # Sélectionner les colonnes 'user_id', 'name' et 'content'
-            df_concat = df_concat[['user_id', 'name', 'content']]
+            df_concat = df_concat[['user_id', 'name', 'message']]
 
             # Enregistrer le résultat dans un fichier CSV nommé pipeline_result.csv
-            df_concat.to_csv("pipeline_result.csv", index=False)
+            df_concat.to_csv("../pipeline_result.csv", index=False)
 
             # Afficher le contenu du fichier pipeline_result.csv
             st.write("Contenu du fichier pipeline_result.csv :")

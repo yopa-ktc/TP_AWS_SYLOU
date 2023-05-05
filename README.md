@@ -2,8 +2,17 @@
 
 LANCER L'ENVIRONNEMENT POUR EXECUTER : ./aws/Scripts/activate
 
-EXECUTER LA COMMANDE STREAMLIT : cd Streamlit 
-                                streamlit run web-api.pi
+EXECUTER LA COMMANDE STREAMLIT :  
+                                streamlit run web-app.py
+Le fichier web-api-py : contient l'application streamlit avec un menu:
+    -->Accueil
+    -->Aggregation
+    -->Feed Pipeline
+----Dans ce fichier Aggregation s'effectue l'aggregation des deux csv (messages.csv et users.csv)
+        et recupere le pipeline_result.csv dans le code
+Le fichier feed_pipeline.py permet de stocker le csv dans la base de données grace à son bouton "alimenter la base de données"
+
+---Feed_pipeline : le bouton Feed Pipeline permet d'ouvrir l'interface du fichier streamlit feed_pipeline pour effectuer l'insertion dans la base de données.
 
 ## 🎯 Second iteration
 

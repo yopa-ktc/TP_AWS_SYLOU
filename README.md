@@ -20,7 +20,7 @@ Dans notre Streamlit we_bucket_data.py, nous avons fait la relation entre le str
 nous parvenos à stocker les fichiers csv à savoir messages.csv et users.csv dans le buckets: "sylvaind-raw-data-bucket-md4-api" à travers le streamlit.
 une commande de verification est possible : aws s3 ls s3://sylvaind-raw-data-bucket-md4-api
 
-le second bucket : "pipeline-aggre-result-data-bucket-md4-api"  va conserver le pipeline_result.csv qui est l'aggregations des deux fichiers csv precedents.
+le second bucket : "pipeline-aggre-result-data-bucket-md4-api"  conserve le pipeline_result.csv qui est l'aggregations des deux fichiers csv precedents. la visualisation de ce fichier pipeline_result.csv se fait dans le streamlit.
 
 ## 🎯 Second iteration
 

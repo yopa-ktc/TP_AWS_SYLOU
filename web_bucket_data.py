@@ -7,6 +7,26 @@ from dotenv import load_dotenv
 import io
 from io import StringIO, BytesIO
 from botocore.exceptions import ClientError
+import subprocess
+
+# import boto3 permet la connexion entre streamlit et aws
+# import dotenv permet de recuperer les informations qui se trouvent dans le fichier .env
+# import io permet la lecture des fichiers dans streamlit
+# import ClientError permet d'afficher les erreurs 
+# import subprocess permet d'ouvrir une interface grace un bouton
+
+
+
+
+# Créer un menu à gauche
+menu = ["Telecharger fichier","Voir Aggregation"]
+choix = st.sidebar.selectbox("Barre de Navigation", menu)
+
+# # Afficher la page d'accueil
+# if choix == "Telecharger fichier":
+#     st.write("<h2 style='color:red;'>Bienvenue sur l'application Streamlit-AWS</h2>", unsafe_allow_html=True)
+
+
 
 load_dotenv()
 
@@ -62,9 +82,9 @@ with upload:
         st.write(dataframe)
         if st.button('Télécharger sur S3'):
             uploaded_file.seek(0)
-            success = uploadFileToBucket(uploaded_file, 'messages.csv', 'sylvaind-raw-data-bucket-md4-api')
+            success = uploadFileToBucket(uploaded_file, 'messages.csv', S3_MESSAGE_BUCKET)
             if success:
-                st.text(f"Le fichier messages.csv a été téléchargé avec succès sur le bucket 'sylvaind-raw-data-bucket-md4-api' !")
+                st.text(f"Le fichier messages.csv a été téléchargé avec succès sur le bucket !" + S3_MESSAGE_BUCKET )
             else:
                 st.text('Échec du téléchargement !')
 
@@ -96,3 +116,10 @@ with leaderboard:
                  st.text('Telechargé avec succes!')
             else:
                 st.text('Echec telechargement!')
+                
+# Ouvrir le fichier feed-pipeline.py
+if choix == "Voir Aggregation":
+    st.write("<h4 style='color:green;'>Cliquez pour voir Resultat Aggregation</h4>", unsafe_allow_html=True)
+    if st.button("Voir Aggregation"):
+        subprocess.Popen(["streamlit", "run", "web_pipeline_aws.py"])
+                

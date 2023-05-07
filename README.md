@@ -14,6 +14,14 @@ Le fichier feed_pipeline.py permet de stocker le csv dans la base de données gr
 
 ---Feed_pipeline : le bouton Feed Pipeline permet d'ouvrir l'interface du fichier streamlit feed_pipeline pour effectuer l'insertion dans la base de données.
 
+
+Dans notre Streamlit we_bucket_data.py, nous avons fait la relation entre le streamlit et le aws en création d'abord nos buckets et notre groupe d'utlisateur nommé "notre-group-tp" suivi des deux utilisateurx autorisés : "sylou-user" et "utilisateur-user"
+
+nous parvenos à stocker les fichiers csv à savoir messages.csv et users.csv dans le buckets: "sylvaind-raw-data-bucket-md4-api" à travers le streamlit.
+une commande de verification est possible : aws s3 ls s3://sylvaind-raw-data-bucket-md4-api
+
+le second bucket : "pipeline-aggre-result-data-bucket-md4-api"  va conserver le pipeline_result.csv qui est l'aggregations des deux fichiers csv precedents.
+
 ## 🎯 Second iteration
 
 

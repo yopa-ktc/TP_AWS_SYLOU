@@ -1,66 +1,98 @@
 import streamlit as st
 import boto3
+import os
+import sys
 import pandas as pd
-from io import StringIO
+from dotenv import load_dotenv
+import io
+from io import StringIO, BytesIO
+from botocore.exceptions import ClientError
+
+load_dotenv()
+
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+S3_MESSAGE_BUCKET = os.getenv('S3_MESSAGE_BUCKET')
+S3_LEADERBOARD_BUCKET = os.getenv('S3_LEADERBOARD_BUCKET')
 
 
-# Connexion au service S3
-s3 = boto3.resource('s3')
+if AWS_ACCESS_KEY_ID is None or AWS_SECRET_ACCESS_KEY is None:
+    print('AWS crendentials are missing...')
+    sys.exit(-1)
 
-# Fonction pour récupérer les fichiers CSV
-def get_csv_files():
-    # Nom du bucket source et des fichiers CSV
-    source_bucket_name = 'sylvaind-raw-data-bucket-md4-api'
-    users_file_name = 'users.csv'
-    messages_file_name = 'messages.csv'
+s3client = boto3.client(
+    's3',
+    aws_access_key_id=AWS_ACCESS_KEY_ID,
+    aws_secret_access_key=AWS_SECRET_ACCESS_KEY
+)
+
+upload, messages, leaderboard = st.tabs(["Telecharger fichier", "Messages", "Leaderboard"])
+
+def uploadFileToBucket(file_object, file_name, bucket_name):
+    try:
+        s3client.upload_fileobj(file_object, bucket_name, file_name)
+        return True
+    except ClientError as e:
+        st.error(f"Une erreur s'est produite lors du téléchargement du fichier sur le bucket S3 : {e}")
+        return False
+
+# utilisez boto3 pour télécharger le tampon de fichiers dans le compartiment S3
+# gérer les erreurs avec un try..except sur le boto ClientError
+
+
+def getFileFromBucket(file_name, bucket_name):
+# utilisez boto3 pour obtenir l'objet du compartiment S3
+# gérer les erreurs avec un try..except sur le boto ClientError
+    return False
     
-    # Télécharger les fichiers CSV depuis le bucket source
-    users_file_object = s3.Object(source_bucket_name, users_file_name).get()['Body'].read().decode('utf-8')
-    messages_file_object = s3.Object(source_bucket_name, messages_file_name).get()['Body'].read().decode('utf-8')
+    
+def computeLeaderboard():
+# téléchargez messages.csv depuis S3_MESSAGE_BUCKET et enregistrez-le dans une base de données
+# créer un nouveau dataframe où les utilisateurs sont regroupés avec leur nombre de messages
+# transformer la dataframe en buffer (n'oubliez pas la fonction seek(0))
+# vérifier avec boto si le S3_LEADERBOARD_BUCKET existe déjà et sinon le créer
+# téléchargez le tampon vers S3_LEADERBOARD_BUCKET dans l'objet leaderboard.csv (utilisez uploadFileToBucket)
+    return False
 
-    # Convertir les fichiers CSV en DataFrames pandas
-    users_df = pd.read_csv(StringIO(users_file_object))
-    messages_df = pd.read_csv(StringIO(messages_file_object))
-    
-    # Renommer la colonne 'content' en 'message' et 'author_id' en 'user_id'
-    aggregated_df = aggregated_df.rename(columns={'content': 'message'})
-    aggregated_df = aggregated_df.rename(columns={'author_id': 'user_id'})
-    
-    # Effectuer l'agrégation
-    aggregated_df = messages_df.merge(users_df[['id', 'name']], left_on='user_id', right_on='id')
-    aggregated_df = aggregated_df[['name', 'message']]
-    
+with upload:
+    st.header("Télécharger des données sur S3")
+    uploaded_file = st.file_uploader("Choisir un fichier")
+    if uploaded_file is not None:
+        dataframe = pd.read_csv(uploaded_file)
+        st.write(dataframe)
+        if st.button('Télécharger sur S3'):
+            uploaded_file.seek(0)
+            success = uploadFileToBucket(uploaded_file, 'messages.csv', 'sylvaind-raw-data-bucket-md4-api')
+            if success:
+                st.text(f"Le fichier messages.csv a été téléchargé avec succès sur le bucket 'sylvaind-raw-data-bucket-md4-api' !")
+            else:
+                st.text('Échec du téléchargement !')
 
-    
-    return aggregated_df
 
-# Fonction pour stocker le fichier CSV agrégé dans un bucket S3
-def store_csv_file(df):
-    # Nom du bucket de destination et du fichier agrégé CSV
-    destination_bucket_name = 'pipeline-aggre-result-data-bucket-md4-api'
-    aggregated_file_name = 'pipeline_result.csv'
-    
-    # Convertir le DataFrame agrégé en CSV
-    aggregated_csv = df.to_csv(index=False)
-    
-    # Écrire le fichier agrégé CSV dans le bucket de destination
-    s3.Object(destination_bucket_name, aggregated_file_name).put(Body=aggregated_csv)
+with messages:
+    st.header("Messages dataset")
+    file = getFileFromBucket('messages.csv', S3_MESSAGE_BUCKET)
+    if file is not False:
+        st.write(pd.read_csv(file))
+        if st.button('Compute leaderboard'):
+            result = computeLeaderboard()
+            if result is not False:
+                st.text('Calcul effectué!')
+            else:
+                st.text('Calcul echoué!')
+    else:
+        st.text('echec du telechargement!')
 
-# Interface Streamlit
-st.title('Récupération et stockage de fichiers CSV')
-st.write('Cette application récupère les fichiers CSV "users.csv" et "messages.csv" depuis le bucket "sylvaind-raw-data-bucket-md4-api" et stocke le résultat agrégé dans le bucket "pipeline-aggre-result-data-bucket-md4-api".')
-
-# Bouton pour récupérer les fichiers CSV et afficher les résultats
-if st.button('Récupérer les fichiers CSV'):
-    # Récupérer les fichiers CSV et effectuer l'agrégation
-    aggregated_df = get_csv_files()
-    
-    # Afficher les résultats dans Streamlit
-    st.write('Résultats de l\'agrégation :')
-    st.write(aggregated_df)
-
-    # Bouton pour stocker le fichier CSV agrégé dans un bucket S3
-    if st.button('Stocker le fichier CSV agrégé dans un bucket S3'):
-        # Stocker le fichier CSV agrégé dans un bucket S3
-        store_csv_file(aggregated_df)
-        st.write('Le fichier CSV agrégé a été stocké dans le bucket "pipeline-aggre-result-data-bucket-md4-api".')
+with leaderboard:
+    st.header("leaderboard utilisateur")
+    file = getFileFromBucket('leaderboard.csv', S3_LEADERBOARD_BUCKET)
+    if file is not False:
+        st.write(pd.read_csv(file))
+    else:
+        st.text('Echec Telechargement!')
+    if st.button('Rafraichir'):
+            file = getFileFromBucket('leaderboard.csv', S3_LEADERBOARD_BUCKET)
+            if file is not False:
+                 st.text('Telechargé avec succes!')
+            else:
+                st.text('Echec telechargement!')

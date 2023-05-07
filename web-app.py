@@ -44,7 +44,7 @@ if choix == "Aggregation":
             df_concat = df_concat[['user_id', 'name', 'message']]
 
             # Enregistrer le résultat dans un fichier CSV nommé pipeline_result.csv
-            df_concat.to_csv("../pipeline_result.csv", index=False)
+            df_concat.to_csv("pipeline_result.csv", index=False)
 
             # Afficher le contenu du fichier pipeline_result.csv
             st.write("Contenu du fichier pipeline_result.csv :")

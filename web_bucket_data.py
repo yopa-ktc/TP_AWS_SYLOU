@@ -82,9 +82,9 @@ with upload:
         st.write(dataframe)
         if st.button('Télécharger sur S3'):
             uploaded_file.seek(0)
-            success = uploadFileToBucket(uploaded_file, 'messages.csv', S3_MESSAGE_BUCKET)
+            success = uploadFileToBucket(uploaded_file, 'messages.csv', 'sylvaind-raw-data-bucket-md4-api')
             if success:
-                st.text(f"Le fichier messages.csv a été téléchargé avec succès sur le bucket !" + S3_MESSAGE_BUCKET )
+                st.text(f"Le fichier messages.csv a été téléchargé avec succès sur le bucket 'sylvaind-raw-data-bucket-md4-api'!"  )
             else:
                 st.text('Échec du téléchargement !')
 

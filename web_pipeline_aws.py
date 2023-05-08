@@ -20,7 +20,7 @@ def getFileFromBucket(file_name, bucket_name):
         data = response['Body'].read().decode('utf-8')
         return pd.read_csv(io.StringIO(data))
     except Exception as e:
-        st.error(f"An error occurred while getting the file from S3 bucket: {e}")
+        st.error(f"Une erreur s'est produite lors de l'obtention du fichier à partir du compartiment S3: {e}")
         return None
 
 file = getFileFromBucket(RESULT_FILE_NAME, RESULT_BUCKET_NAME)
@@ -29,4 +29,4 @@ if file is not None:
     st.header("Résultat du pipeline")
     st.write(file)
 else:
-    st.error("Failed to download the pipeline_result.csv file from S3!")
+    st.error("Échec du téléchargement du fichier pipeline_result.csv à partir de S3!")

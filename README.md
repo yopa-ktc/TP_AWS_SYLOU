@@ -24,7 +24,7 @@ le second bucket : "pipeline-aggre-result-data-bucket-md4-api"  conserve le pipe
 
 Le fichier web_api_aws permet d'afficher le streamlit qui recupere le pipeline_result.csv dans le bucket : "pipeline-aggre-result-data-bucket-md4-api" et le stocke dans la base de données leaderboard.db grace à une connexion de l'api et aws.
 
-le bouton "Afficher le Csv"  permet de visualiser le fichier "pipeline_result.csv", et le bouton "alimenter la base de donnees" enregistre directement dans la base de données.
+le bouton: "Afficher le Csv"  permet de visualiser le fichier: "pipeline_result.csv", et le bouton "alimenter la base de donnees" enregistre directement dans la base de données.
 
 
 

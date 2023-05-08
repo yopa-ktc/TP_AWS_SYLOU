@@ -10,6 +10,7 @@ from botocore.exceptions import ClientError
 import subprocess
 
 
+
 # import boto3 permet la connexion entre streamlit et aws
 # import dotenv permet de recuperer les informations qui se trouvent dans le fichier .env
 # import io permet la lecture des fichiers dans streamlit

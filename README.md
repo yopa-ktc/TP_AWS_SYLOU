@@ -22,9 +22,11 @@ une commande de verification est possible : aws s3 ls s3://sylvaind-raw-data-buc
 
 le second bucket : "pipeline-aggre-result-data-bucket-md4-api"  conserve le pipeline_result.csv qui est l'aggregations des deux fichiers csv precedents. la visualisation de ce fichier pipeline_result.csv se fait dans le streamlit.
 
-Le fichier web_api_aws permet d'afficher le streamlit qui recupere le pipeline_result.csv dans le bucket : pipeline-aggre-result-data-bucket-md4-api et le stocke dans la base de données leaderboard.db grace à une connexion de l'api et aws.
+Le fichier web_api_aws permet d'afficher le streamlit qui recupere le pipeline_result.csv dans le bucket : "pipeline-aggre-result-data-bucket-md4-api" et le stocke dans la base de données leaderboard.db grace à une connexion de l'api et aws.
 
-le bouton "Afficher le Csv"  permet de visualiser le fichier pipeline_result.csv, et le bouton "alimenter la base de donnees" enregistre directement dans la base de données.
+le bouton "Afficher le Csv"  permet de visualiser le fichier "pipeline_result.csv", et le bouton "alimenter la base de donnees" enregistre directement dans la base de données.
+
+
 
 ## 🎯 Second iteration
 

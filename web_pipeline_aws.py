@@ -3,6 +3,7 @@ import boto3
 import pandas as pd
 import io
 
+
 AWS_ACCESS_KEY_ID = 'AKIA2BHJHJTWXQQZBRUC'
 AWS_SECRET_ACCESS_KEY = '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'
 RESULT_BUCKET_NAME = 'pipeline-aggre-result-data-bucket-md4-api'

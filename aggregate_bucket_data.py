@@ -2,6 +2,7 @@ import boto3
 import pandas as pd
 import io
 
+
 # Informations d'identification AWS
 AWS_ACCESS_KEY_ID = 'AKIA2BHJHJTWXQQZBRUC'
 AWS_SECRET_ACCESS_KEY = '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'

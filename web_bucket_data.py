@@ -84,7 +84,9 @@ with upload:
         st.write(dataframe)
         if st.button('Télécharger sur S3'):
             uploaded_file.seek(0)
-            success = uploadFileToBucket(uploaded_file, 'messages.csv', S3_MESSAGE_BUCKET)
+            #Au lieu de mettre 'message.csv' en dur, met la variable uploaded_file.name, comme cela
+            #Elle prendra dynamiquement le nom du fichier uploadé (message.csv ou user.csv)
+            success = uploadFileToBucket(uploaded_file, uploaded_file.name, S3_MESSAGE_BUCKET)
             if success:
                 st.text(f"Le fichier messages.csv a été téléchargé avec succès sur le bucket !" + S3_MESSAGE_BUCKET )
             else:

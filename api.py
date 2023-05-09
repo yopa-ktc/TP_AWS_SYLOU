@@ -4,7 +4,14 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from app.Repository_leaderboard import LeaderBoard_Repository
+from aggregate_bucket_data import download_file
 from feed_database import feed_database
+import boto3
+import pandas as pd
+from dotenv import load_dotenv
+import os
+# Chargement des variables d'environnement du fichier .env
+load_dotenv()
 
 
 engine = create_engine("sqlite:///leaderboard.db", pool_pre_ping=True)
@@ -40,6 +47,30 @@ def leaderboard():
     for lead in get_all_leadboard:
         all_lead.append({"id": lead.id, "user_id": lead.user_id, "name": lead.name, "message": nbre_message_userId[lead.user_id]})
     return jsonify({"leaderboard" :all_lead})
+
+@app.route("/feed/s3", methods=["POST"])
+def feedS3():
+    # Initialisation du client S3
+    s3_client = boto3.client(
+        's3',
+        aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'),
+        aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY')
+    )
+    
+    #Récupération du bucket envoyé par l'utilisateur
+    s3_bucket = request.json.get("s3_bucket")
+    if s3_bucket != os.getenv('S3_LEADERBOARD_BUCKET'):
+        message = "Nom du bucket incorrect ou manquant !"
+    else:
+        # Vérifier si le fichier "pipeline.csv" existe dans le bucket
+        try:
+            s3_client.head_object(Bucket=s3_bucket, Key='pipeline_result.csv')
+            message = "fichier existant !"
+            #Stockage
+            feed_database('pipeline_result.csv')
+        except:
+            message = "fichier non existant !"
+    return jsonify({"message": message})
         
     
 if __name__ == "__main__":
